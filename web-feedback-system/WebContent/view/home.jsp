@@ -45,7 +45,7 @@
 <script src="view/resource/lib/jquery-2.1.4.min.js"></script>
 <script src="view/resource/bootstrap/js/bootstrap.min.js"></script>
 <script src="view/resource/lib/notify.js"></script>
-<script src="view/resource/lib/LuceneSearcher.js"></script>
+<script src="view/resource/lib/LuceneSearcher.js" charset="UTF-8"></script>
 <link rel="stylesheet" href="view/resource/css/theme_customize.css">
 
 <style>
@@ -89,49 +89,61 @@
 					style="min-height: 500px">
 					<div class="panel search panel-default">
 						<div class="form_search_lucene"></div>
-						<div class="results_search_lucene">
+						<div class="results_search_lucene"
+							style="margin-top: 10px; color: #CD0000;">
 							<%
-								if(request.getAttribute("count") != null)
-														out.write("Tìm thấy "+total +" kết quả");
+								if(request.getAttribute("total") != null){
+									out.write("<i>Tìm thấy "+total +" kết quả</i>");
+								}
 							%>
 						</div>
+						<%
+							out.write("<input class = 'hidden_key' style = 'display:none' value = '" + request.getParameter("search_lucene") + "'>");
+						%>
 					</div>
 					<%
 						for (Document doc : results) {
-										out.write("<h4><a target = '_blank' href = '/ControllerJobDetail?jobId="+doc.get("JobId")+"'> "+ doc.get("JobName")+"</a></h4>");
-									}
+							out.write("<h4><a target = '_blank' href = '/ControllerJobDetail?jobId="+doc.get("JobId")+"'> "+ doc.get("JobName")+"</a></h4>");
+						}
+					%>
+					<%
+						int currentPage = Integer.parseInt(request.getAttribute("currentPage").toString());
+						int noOfPage = Integer.parseInt(request.getAttribute("noOfPage").toString());
+						int end = Integer.parseInt(request.getAttribute("end").toString());;
+						int start = Integer.parseInt(request.getAttribute("start").toString());;						
 					%>
 					<ul class="pagination">
-						<%--For displaying Previous link except for the 1st page --%>
 						<%
-							if(!"0".equals(request.getAttribute("currentPage"))){
+							if (currentPage != 1){
 						%>
 						<li><a
-							href="?search_lucene=<%=request.getParameter("search_lucene") %>&page=${currentPage - 1}">Previous</a></li>
-						<%
-							}else{
-						%>
-						<li class="disabled"><a
 							href="?search_lucene=<%=request.getParameter("search_lucene") %>&page=${currentPage - 1}">Previous</a></li>
 						<%
 							}
 						%>
-
-						<%--For displaying Next link --%>
 						<%
-							if(!request.getAttribute("currentPage").equals(request.getAttribute("noOfPage"))){
+							for(int i = start; i <= end; i++){
+								if(currentPage == i){
 						%>
-						<li><a
-							href="?search_lucene=<%=request.getParameter("search_lucene") %>&page=${currentPage + 1}">Next</a></li>
+						<li class="active"><a style = "pointer-events: none; cursor:default;" href="#"><%= i%></a></li>
 						<%
 							}else{
 						%>
-						<li class="disabled"><a
+						<li><a
+							href="?search_lucene=<%=request.getParameter("search_lucene") %>&page=<%= i%>"><%= i%></a></li>
+						<%
+							}}
+						%>
+						<%
+							if(currentPage < noOfPage){
+						%>
+						<li><a
 							href="?search_lucene=<%=request.getParameter("search_lucene") %>&page=${currentPage + 1}">Next</a></li>
 						<%
 							}
 						%>
 					</ul>
+
 					<!-- loading icon -->
 					<div id="loading" style="margin: 0 auto;"
 						class="loading-icon custom_hiden"></div>
@@ -143,10 +155,15 @@
 	<a href="#" class="go-to-top"></a>
 	<script type="text/javascript" src="view/resource/lib/home.js"></script>
 
-	<script type="text/javascript">
+	<script type="text/javascript" charset="UTF-8">
 		$(".form_search_lucene").LuceneSearch({
 			_server_ : "ControllerSearcher",
 		});
+
+		$(document).ready(function() {
+			$(".in_search_lucene").val($(".hidden_key").val());
+		});
 	</script>
+
 </body>
 </html>

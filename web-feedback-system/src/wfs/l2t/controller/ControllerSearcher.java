@@ -1,8 +1,11 @@
 package wfs.l2t.controller;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,9 +24,26 @@ import wfs.l2t.utility.LuceneSearcher;
 public class ControllerSearcher extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	String[] fields = { "JobId", "JobName", "Location", "Description", "Tags",
-			"Requeriment", "Benifit", "Company" };
-	LuceneSearcher lc = new LuceneSearcher(fields,
-			"E:/ANHTUYEN/HOCTAP/MaNguonMo/OS/IndexFile");
+			"Requeriment", "Benifit", "Company" };	
+	int end = 0;
+
+	private String getIndexedFileLocation(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String link = "";
+		ServletContext context = getServletContext();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(
+					context.getResource("/WEB-INF/indexed-location.txt")
+							.getPath()));
+			String str;
+			while ((str = in.readLine()) != null) {
+				link += str;
+			}
+			in.close();
+		} catch (IOException e) {
+		}
+		return link;
+	}
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -48,18 +68,39 @@ public class ControllerSearcher extends HttpServlet {
 		String query = request.getParameter("search_lucene");
 		String page = request.getParameter("page");
 		List<Document> results = null;
-		if (page == null) {			
-			page = "0";
+		int start = 1;		
+		int currentPage;
+		if (page == null) {
+			page = "1";
+			currentPage = Integer.parseInt(page);
+			end = 10;					
+		}else{
+			currentPage = Integer.parseInt(page);
+			if(currentPage >= end - 3){
+				end +=3;
+			}
+		}		
+		start = end - 9;
+		
+		LuceneSearcher lc = new LuceneSearcher(fields, getIndexedFileLocation(request,response));
+		results = lc.search(query, (currentPage-1) * 10,
+				(currentPage-1) * 10 + 10);
+		request.setAttribute("total", lc.getTotal());
+		int noOfPages = (int) Math.ceil(lc.getTotal() * 1.0 / 10);
+		if(noOfPages < end){
+			end = noOfPages;
+			start = end - 9;
+			if(start <= 0)
+				start = 1;
 		}
-		results = lc.search(query, Integer.parseInt(page)*10, Integer.parseInt(page)*10 + 10);
-		request.setAttribute("total", results.size());
-		int noOfPages = (int) Math.ceil(results.size() * 1.0 / 10);
-		request.setAttribute("noOfPages", noOfPages);
-		request.setAttribute("currentPage", page);
+		request.setAttribute("noOfPage", noOfPages);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("start", start);
+		request.setAttribute("end", end);
 		request.setAttribute("results", results);
 		request.getRequestDispatcher("view/home.jsp")
 				.include(request, response);
-		
+
 	}
 
 	/**

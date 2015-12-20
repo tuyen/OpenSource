@@ -22,6 +22,14 @@ public class LuceneSearcher {
 	private String[] fields;
 	private Path indexDirectory = FileSystems.getDefault().getPath(
 			"IndexDirectory");
+	private int total = 0;
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
 
 	/**
 	 * constructor to new lucene search
@@ -61,7 +69,7 @@ public class LuceneSearcher {
 
 			/** run the query */
 			hits = searcher.search(finalQuery, limit);
-
+			setTotal(hits.totalHits);
 			for (int i = skip; i < limit; i++) {
 				docs.add(searcher.doc(hits.scoreDocs[i].doc));
 			}
