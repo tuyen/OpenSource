@@ -1,0 +1,1 @@
+java.exe -Dfile.encoding=UTF-8 -jar bot.jar 22

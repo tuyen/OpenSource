@@ -1,0 +1,127 @@
+.custom_navbar_color {
+	color: #ffffff;
+	background-color: #115D9D;	
+}
+
+.custom_menu_color{
+	background-color:#115D9D;
+}
+
+body{
+	background-color:#F4F4F4;
+	padding-top:30px;
+}
+
+.custom_color_white {
+	color: white;
+}
+
+/* START loading icon with css3 */
+.loading-icon{
+    border: 8px solid #FFF;
+  border-top-color: red;
+  border-left-color: blue;
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+  overflow:hidden;
+  border-radius: 50%;
+    -webkit-animation: mm 0.7s linear infinite; /* Chrome, Safari, Opera */
+    animation: mm 0.7s linear infinite;
+}
+
+.flip-container{overflow:hidden}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes mm{
+    from {left: 0px;}
+    to {left: 2000px;}
+}
+
+@keyframes mm{
+    from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* END loading icon with css3 */
+
+/* START customize pre tag */
+pre {
+	white-space: pre-wrap; /* CSS 3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+	font-family: arial;
+	font-size: 15px;
+	padding: 0px 15px;
+	background: #ffffff;
+	border: none;
+	margin: 0px;
+	border-radius: 0px;
+	word-break: normal;
+}
+/* END customize pre tag */
+
+.custom_background_color {
+	background-color: #f7f7f7;
+}
+
+.custom_sider_bar_color
+{
+	background-color: #f7f7f7;
+}
+
+.custom_menu_background
+{
+	background-color: #ff0000;
+}
+
+.custom_hiden {
+    display: none;
+}
+
+.custom_font_bold
+{		
+	font-weight:lighter;
+	font-family: sans-serif;
+	font-size: 16;
+}
+
+
+.custom_margin
+{
+	margin-right: 10px;
+}
+
+.custom_margin_center
+{
+	margin: auto;
+}
+
+.custom_margin_left
+{
+	margin-left: 3px;	
+}
+
+/* START button go to top */
+a.go-to-top {
+	display: none;
+	width: 60px;
+	height: 60px;
+	position: fixed;
+	z-index: 999;
+	right: 20px;
+	bottom: 80px;
+	background: #1F85CF url("../image/up-arrow.png") no-repeat center 43%;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+}
+a:hover.go-to-top {
+	background-color: #165D91;
+}
+/* END button go to top */

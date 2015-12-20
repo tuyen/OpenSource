@@ -1,0 +1,40 @@
+ul.detail-list {
+	list-style: outside none none;
+	box-sizing: border-box;
+	padding-left: 0px;
+	
+	}
+dl{
+	width: 100%;
+  	padding-left: 20px;
+  	overflow:hidden;
+  	
+}
+dt{
+	font-weight: bold;
+	width:300px;
+	margin-right:10px;
+	float:left;
+}
+dd{
+	
+}
+ul.list_info{
+	margin-left: 200px;
+}
+.form-group{
+	
+}
+#personal-list{
+	width: 100%;
+}
+#personal-list li{
+	float: left;
+	width: 50%;
+}
+br{
+	clear: left;
+}
+select[name=edu-school]{
+	width:70px
+}
