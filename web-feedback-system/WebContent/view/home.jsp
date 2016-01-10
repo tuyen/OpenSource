@@ -93,8 +93,8 @@
 							style="margin-top: 10px; color: #CD0000;">
 							<%
 								if(request.getAttribute("total") != null){
-									out.write("<i>Tìm thấy "+total +" kết quả</i>");
-								}
+														out.write("<i>Tìm thấy "+total +" kết quả</i>");
+													}
 							%>
 						</div>
 						<%
@@ -103,14 +103,17 @@
 					</div>
 					<%
 						for (Document doc : results) {
+							out.write("<div class = 'panel panel-body'>");			
 							out.write("<h4><a target = '_blank' href = '/ControllerJobDetail?jobId="+doc.get("JobId")+"'> "+ doc.get("JobName")+"</a></h4>");
-						}
-					%>
+							out.write("<pre>" + doc.get("Description") + "</pre>");
+							out.write("</div>");
+									}
+					%>					
 					<%
 						int currentPage = Integer.parseInt(request.getAttribute("currentPage").toString());
-						int noOfPage = Integer.parseInt(request.getAttribute("noOfPage").toString());
-						int end = Integer.parseInt(request.getAttribute("end").toString());;
-						int start = Integer.parseInt(request.getAttribute("start").toString());;						
+									int noOfPage = Integer.parseInt(request.getAttribute("noOfPage").toString());
+									int end = Integer.parseInt(request.getAttribute("end").toString());;
+									int start = Integer.parseInt(request.getAttribute("start").toString());;
 					%>
 					<ul class="pagination">
 						<%
@@ -123,14 +126,15 @@
 						%>
 						<%
 							for(int i = start; i <= end; i++){
-								if(currentPage == i){
+												if(currentPage == i){
 						%>
-						<li class="active"><a style = "pointer-events: none; cursor:default;" href="#"><%= i%></a></li>
+						<li class="active"><a
+							style="pointer-events: none; cursor: default;" href="#"><%=i%></a></li>
 						<%
 							}else{
 						%>
 						<li><a
-							href="?search_lucene=<%=request.getParameter("search_lucene") %>&page=<%= i%>"><%= i%></a></li>
+							href="?search_lucene=<%=request.getParameter("search_lucene")%>&page=<%=i%>"><%=i%></a></li>
 						<%
 							}}
 						%>
