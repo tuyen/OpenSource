@@ -95,7 +95,7 @@
 				</div>
 				<div class="col-md-9 custom_background_color flip-container" style="min-height: 500px">
 					<div class="panel search panel-default">
-						<div class = "form form_search_lucene"></div>						
+						<div class = "form_search_lucene"></div>						
 					</div>
 					<!-- invite user input their CV -->
 					<%
@@ -121,7 +121,8 @@
 	<script type="text/javascript" src="view/resource/lib/job-utility.js"></script>
 	<script type="text/javascript">
 	$(".form_search_lucene").LuceneSearch({
-		_server_	:	"ControllerSearcher",
+		_server_ : "ControllerSearcher",
+		_form_name_ : "search_lucene"
 	});
 	</script>
 </body>

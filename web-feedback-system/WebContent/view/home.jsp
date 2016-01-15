@@ -21,11 +21,7 @@
 <%
 	String userId = (String) request.getAttribute("user");
 	ModelAccount account = new ModelAccount();
-	dtoAccount dtoAcc = account.getAccountById(userId);
-
-	//get category list
-	ModelCategory mdc = new ModelCategory();
-	List<dtoCategory> categoryList = mdc.getAllCategory();
+	dtoAccount dtoAcc = account.getAccountById(userId);	
 
 	int _page = 0;
 	if(request.getParameter("page") != null)
@@ -89,6 +85,7 @@
 					style="min-height: 500px">
 					<div class="panel search panel-default">
 						<div class="form_search_lucene"></div>
+												
 						<div class="results_search_lucene"
 							style="margin-top: 10px; color: #CD0000;">
 							<%
@@ -97,6 +94,7 @@
 													}
 							%>
 						</div>
+						<!-- store searching query to a hidden input -->
 						<%
 							out.write("<input class = 'hidden_key' style = 'display:none' value = '" + request.getParameter("search_lucene") + "'>");
 						%>
@@ -162,8 +160,10 @@
 	<script type="text/javascript" charset="UTF-8">
 		$(".form_search_lucene").LuceneSearch({
 			_server_ : "ControllerSearcher",
+			_form_name_ : "search_lucene"
 		});
 
+		//get & set searching value from hidden input to search input
 		$(document).ready(function() {
 			$(".in_search_lucene").val($(".hidden_key").val());
 		});

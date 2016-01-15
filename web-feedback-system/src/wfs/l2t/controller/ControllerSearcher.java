@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.TopDocs;
 
+import wfs.l2t.utility.LoginUtility;
 import wfs.l2t.utility.LuceneSearcher;
 
 /**
@@ -23,8 +24,9 @@ import wfs.l2t.utility.LuceneSearcher;
 @WebServlet("/ControllerSearcher")
 public class ControllerSearcher extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private LoginUtility loginUtility;
 	String[] fields = { "JobId", "JobName", "Location", "Description", "Tags",
-			"Requeriment", "Benifit", "Company" };	
+			"Requeriment", "Benifit", "Company" };
 	int end = 0;
 
 	private String getIndexedFileLocation(HttpServletRequest request,
@@ -32,9 +34,8 @@ public class ControllerSearcher extends HttpServlet {
 		String link = "";
 		ServletContext context = getServletContext();
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					context.getResource("/WEB-INF/indexed-location.txt")
-							.getPath()));
+			BufferedReader in = new BufferedReader(new FileReader(context
+					.getResource("/WEB-INF/indexed-location.txt").getPath()));
 			String str;
 			while ((str = in.readLine()) != null) {
 				link += str;
@@ -50,6 +51,7 @@ public class ControllerSearcher extends HttpServlet {
 	 */
 	public ControllerSearcher() {
 		super();
+		loginUtility = new LoginUtility();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -65,6 +67,16 @@ public class ControllerSearcher extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 
+		// check if user is logged in
+		if (loginUtility.isLogged(request, response)) {
+
+			if (request.getParameter("logout") != null) {
+				this.loginUtility.logOut(request, response);
+				response.sendRedirect(request.getContextPath() + "/login");
+			}
+			//
+			request.setAttribute("user", loginUtility.getLoggedUserId());
+		
 		String query = request.getParameter("search_lucene");
 		String page = request.getParameter("page");
 		List<Document> results = null;
@@ -100,7 +112,9 @@ public class ControllerSearcher extends HttpServlet {
 		request.setAttribute("results", results);
 		request.getRequestDispatcher("view/home.jsp")
 				.include(request, response);
-
+		} else {
+			response.sendRedirect(request.getContextPath() + "/login");
+		}
 	}
 
 	/**
